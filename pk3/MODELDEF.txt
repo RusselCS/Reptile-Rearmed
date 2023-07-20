@@ -1,0 +1,10 @@
+// Actual models
+model MagnetBeamBlockLive
+{
+    Path "models/magnet beam"
+    Model 0 "RRMBC.md3"
+    Skin 0 "RRMBC.png"
+    Scale 1.0 1.0 1.2
+ 
+    FrameIndex RRMB C 0 0
+}

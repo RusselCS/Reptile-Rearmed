@@ -1,0 +1,105 @@
+actor MagnetBeamItem : BaseMM8BDMUseItem
+{
+    //$Title Magnet Beam
+    //$Sprite RRMBA0
+    Inventory.RespawnTics 210
+    inventory.amount 3
+    inventory.maxamount 3
+    inventory.pickupmessage "$PU_RR_MAGNETBEAM"
+    inventory.icon "MAGBEAM"
+    Tag "$TAG_RR_MAGNETBEAM"
+    Inventory.PickupSound "reptile/assists/scoreballpickup"
+    States
+    {
+    SpawnLoop:
+        RRMB A -1
+        wait
+    Use:
+        RRMB A 0 A_SpawnItemEx("MagnetBeamSpawner", cos(pitch)*32, 0, -sin(pitch)*32+28, cos(pitch), 0, -sin(pitch), 0, SXF_TRANSFERTRANSLATION|SXF_MULTIPLYSPEED)
+        stop
+    }
+}
+
+actor MagnetBeamSpawner : BasicProjectile
+{
+    var int user_NoTranslation;
+    Speed 32
+    Damage (0)
+    reactiontime 24
+    +THRUSPECIES
+    species "MagnetBeam"
+    States
+    {
+    Spawn:
+        TNT1 A 0
+        TNT1 A 0 A_PlaySoundEx("reptile/assists/magnetbeamspawn", "body")
+        TNT1 A 0 A_ClearTarget
+    SpawnLoop:
+        TNT1 A 0 A_SpawnItemEx("MagnetBeamBlockPlacer",0,0,0,0,0,0,0,SXF_ABSOLUTEANGLE|SXF_TRANSFERTRANSLATION)
+        TNT1 A 0 A_SpawnItemEx("MagnetBeamBlockPlacer",-1*momx/4,-1*momy/4,-1*momz/4,0,0,0,0,SXF_ABSOLUTEANGLE|SXF_ABSOLUTEPOSITION|SXF_TRANSFERTRANSLATION)
+        TNT1 A 0 A_SpawnItemEx("MagnetBeamBlockPlacer",-2*momx/4,-2*momy/4,-2*momz/4,0,0,0,0,SXF_ABSOLUTEANGLE|SXF_ABSOLUTEPOSITION|SXF_TRANSFERTRANSLATION)
+        TNT1 A 0 A_SpawnItemEx("MagnetBeamBlockPlacer",-3*momx/4,-3*momy/4,-3*momz/4,0,0,0,0,SXF_ABSOLUTEANGLE|SXF_ABSOLUTEPOSITION|SXF_TRANSFERTRANSLATION)
+        TNT1 A 1 A_Countdown
+        loop
+    Death:
+        TNT1 A 1 A_GiveInventory("Once")
+        TNT1 A 1
+        stop
+    }
+}
+
+actor MagnetBeamBlockPlacer
+{
+    +NOINTERACTION
+    +MISSILE
+    States
+    {
+    Spawn:
+        TNT1 A 0
+        TNT1 A 0 A_SpawnItemEx("MagnetBeamBlock", 0, 0, 4, 0, 0, 0, 0, SXF_TRANSFERTRANSLATION|SXF_TRANSFERPOINTERS)
+        TNT1 A 0 A_SpawnItemEx("MagnetBeamBlockLive", 0, 0, 0, 0, 0, 0, 0, SXF_TRANSFERTRANSLATION|SXF_TRANSFERPOINTERS)
+        stop
+    }
+}
+
+actor MagnetBeamBlock
+{
+    +SOLID
+    +NOGRAVITY
+    +FORCEXYBILLBOARD
+    +THRUSPECIES
+    +CANPASS
+    species "MagnetBeam"
+    Scale 2.0
+    height 4
+    radius 4
+    reactiontime 175
+    renderstyle none
+    States
+    {
+    Spawn:
+        RRMB C 0
+        RRMB C 1 A_JumpIfInTargetInventory("Once", 1, "Waiting")
+        wait
+    Waiting:
+        RRMB C 1 A_Countdown
+        RRMB C 0 A_JumpIf(reactiontime < 70, "Blinking")
+        loop
+    Blinking:
+        RRMB CCZZ 1 A_Countdown
+        loop
+    }
+}
+
+actor MagnetBeamBlockLive : MagnetBeamBlock
+{
+    +BUMPSPECIAL
+    renderstyle normal
+    States
+    {
+    Spawn:
+        RRMB C 0
+        RRMB C 0 Thing_SetSpecial(0, 128, 0, 15, 0)
+        goto Super::Spawn
+    }
+}

@@ -1,0 +1,5 @@
+
+////////// ASSISTS //////////
+reptile/assists/magnetbeamspawn ETRAP
+reptile/assists/scoreballpickup CTFPCKUP
+
