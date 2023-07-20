@@ -30,3 +30,15 @@ model MagnetBeamBlockLive
  
     FrameIndex RRMB C 0 0
 }
+
+model CrunchranSnare { Path "models/crunchran" Model 0 "FLATSPRT.md3" Skin 0 "RRCSHOLK.png" Scale 0.5 0.5 0.5 Offset 0 0 0.1 AngleOffset 180 FrameIndex RRCS K 0 0 }
+model CrunchranSnare { Path "models/crunchran" Model 0 "FLATSPRT.md3" Skin 0 "RRCSHOLL.png" Scale 0.5 0.5 0.5 Offset 0 0 0.1 AngleOffset 180 FrameIndex RRCS L 0 0 }
+model CrunchranSnare { Path "models/crunchran" Model 0 "FLATSPRT.md3" Skin 0 "RRCSHOLM.png" Scale 0.5 0.5 0.5 Offset 0 0 0.1 AngleOffset 180 FrameIndex RRCS M 0 0 }
+model CrunchranSnare { Path "models/crunchran" Model 0 "FLATSPRT.md3" Skin 0 "RRCSHOLN.png" Scale 0.5 0.5 0.5 Offset 0 0 0.1 AngleOffset 180 FrameIndex RRCS N 0 0 }
+model CrunchranSnare { Path "models/crunchran" Model 0 "FLATSPRT.md3" Skin 0 "RRCSHOLO.png" Scale 0.5 0.5 0.5 Offset 0 0 0.1 AngleOffset 180 FrameIndex RRCS O 0 0 }
+model CrunchranSnare { Path "models/crunchran" Model 0 "FLATSPRT.md3" Skin 0 "RRCSHOLP.png" Scale 0.5 0.5 0.5 Offset 0 0 0.1 AngleOffset 180 FrameIndex RRCS P 0 0 }
+model CrunchranSnare { Path "models/crunchran" Model 0 "FLATSPRT.md3" Skin 0 "RRCSHOLQ.png" Scale 0.5 0.5 0.5 Offset 0 0 0.1 AngleOffset 180 FrameIndex RRCS Q 0 0 }
+model CrunchranSnare { Path "models/crunchran" Model 0 "FLATSPRT.md3" Skin 0 "RRCSHOLR.png" Scale 0.5 0.5 0.5 Offset 0 0 0.1 AngleOffset 180 FrameIndex RRCS R 0 0 }
+model CrunchranSnare { Path "models/crunchran" Model 0 "FLATSPRT.md3" Skin 0 "RRCSHOLS.png" Scale 0.5 0.5 0.5 Offset 0 0 0.1 AngleOffset 180 FrameIndex RRCS S 0 0 }
+model CrunchranSnare { Path "models/crunchran" Model 0 "FLATSPRT.md3" Skin 0 "RRCSHOLT.png" Scale 0.5 0.5 0.5 Offset 0 0 0.1 AngleOffset 180 FrameIndex RRCS T 0 0 }
+model CrunchranSnare { Path "models/crunchran" Model 0 "FLATSPRT.md3" Skin 0 "RRCSHOLU.png" Scale 0.5 0.5 0.5 Offset 0 0 0.1 AngleOffset 180 FrameIndex RRCS U 0 0 }

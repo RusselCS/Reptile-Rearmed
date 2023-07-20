@@ -2,3 +2,7 @@
 
 PU_RR_MAGNETBEAM = "Support Item! Magnet Beam!";
 TAG_RR_MAGNETBEAM = "Magnet Beam";
+
+PU_RR_CRUNCHRAN = "Support Item! Crunchran Snare!";
+TAG_RR_CRUNCHRAN = "Crunchran Snare";
+OB_RR_CRUNCHRAN = "%o was munched by %k's Crunchran Snare.";

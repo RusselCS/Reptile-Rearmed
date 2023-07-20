@@ -1,3 +1,4 @@
 #include "decorate/debug.dec"
 
 #include "decorate/assists/magnetbeam.dec"
+#include "decorate/assists/crunchran.dec"

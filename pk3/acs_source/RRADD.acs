@@ -1,0 +1,16 @@
+#library "RRADD"
+
+#include "zcommon.acs"
+
+#include "DTADD.acs"
+
+script "rr_wepdefs" OPEN
+{
+    
+}
+
+script "rr_assistdefs" OPEN
+{
+    DefineAssistItem("TAG_RR_MAGNETBEAM", "MagnetBeamItem", "RRMBB0", 3, DTADD_GRP_DASH, true);
+    DefineAssistItem("TAG_RR_CRUNCHRAN", "CrunchranItem", "RRCSZ0", 1, DTADD_GRP_ATTACK, true);
+}

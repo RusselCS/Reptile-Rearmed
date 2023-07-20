@@ -5,3 +5,9 @@ graphic MAGBEAM, 30, 30
    Patch RRMBB0, 0, 0
 }
 
+graphic CRUNCH, 30, 30
+{
+   XScale 2.0
+   YScale 2.0
+   Patch RRCSZ0, 0, 0
+}

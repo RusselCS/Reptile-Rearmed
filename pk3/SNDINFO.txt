@@ -3,3 +3,5 @@
 reptile/assists/magnetbeamspawn ETRAP
 reptile/assists/scoreballpickup CTFPCKUP
 
+reptile/assists/crunchranlunge COMSHO
+reptile/assists/crunchranchomp CHOMP

@@ -1,0 +1,267 @@
+actor CrunchranItem : BaseMM8BDMUseItem
+{
+    //$Title Crunchran Snare
+    //$Sprite WEA2A0
+    Inventory.RespawnTics 210
+    inventory.pickupmessage "$PU_RR_CRUNCHRAN"
+    inventory.icon "CRUNCH"
+    Tag "$TAG_RR_CRUNCHRAN"
+    Inventory.PickupSound "item/1up"
+    States
+    {
+    SpawnLoop:
+        RRCS Z -1
+        wait
+    Use:
+        RRCS Z 0 A_PlaySoundEx("item/refill","Voice")
+        RRCS Z 0 A_SpawnItemEx("CrunchranSnare", 64, 0, (z-floorz))
+        stop
+    }
+}
+
+const int RR_CRUNCHRAN_SPEED = 24;
+const int RR_CRUNCHRAN_CHECKRAD = 20;
+
+const int RR_CRUNCHRAN_BLINKMIN = 70;
+const int RR_CRUNCHRAN_BLINKMAX = 140;
+
+actor CrunchranSnare : BasicBouncer
+{
+    +MISSILE
+    +NODROPOFF
+    +SEEKERMISSILE
+    +THRUACTORS
+    Damage (0)
+    speed 0
+    Radius 32
+    Height 4
+    var int user_blinktime;
+    reactiontime 700
+    States
+    {
+    Spawn:
+        RRCS K 0
+        RRCS KLM 3
+    Reset:
+        RRCS N 0 A_Stop
+        RRCS N 0 A_SetUserVar(user_blinktime, random(RR_CRUNCHRAN_BLINKMIN, RR_CRUNCHRAN_BLINKMAX))
+        RRCS N 0 A_RearrangePointers(AAPTR_DEFAULT, AAPTR_DEFAULT, AAPTR_NULL)
+    SpawnLoop:
+        RRCS N 0 A_GiveInventory("CrunchranSnareLurk_P", 1)
+        RRCS N 1 A_JumpIfTargetInLOS("ChaseBegin", 360, JLOSF_PROJECTILE)
+        RRCS N 0 A_SetUserVar(user_blinktime, user_blinktime-1)
+        RRCS N 0 A_JumpIf(user_blinktime <= 0, "SpawnBlink")
+        loop
+    SpawnBlink:
+        RRCS N 0 A_GiveInventory("CrunchranSnareLurk_P", 1)
+        RRCS N 1 A_JumpIfTargetInLOS("ChaseBegin", 360, JLOSF_PROJECTILE)
+        RRCS N 0 A_GiveInventory("CrunchranSnareLurk_P", 1)
+        RRCS N 1 A_JumpIfTargetInLOS("ChaseBegin", 360, JLOSF_PROJECTILE)
+        RRCS N 0 A_GiveInventory("CrunchranSnareLurk_P", 1)
+        RRCS N 1 A_JumpIfTargetInLOS("ChaseBegin", 360, JLOSF_PROJECTILE)
+        RRCS N 0 A_GiveInventory("CrunchranSnareLurk_P", 1)
+        RRCS N 1 A_JumpIfTargetInLOS("ChaseBegin", 360, JLOSF_PROJECTILE)
+
+        RRCS M 0 A_GiveInventory("CrunchranSnareLurk_P", 1)
+        RRCS M 1 A_JumpIfTargetInLOS("ChaseBegin", 360, JLOSF_PROJECTILE)
+        RRCS M 0 A_GiveInventory("CrunchranSnareLurk_P", 1)
+        RRCS M 1 A_JumpIfTargetInLOS("ChaseBegin", 360, JLOSF_PROJECTILE)
+        RRCS M 0 A_GiveInventory("CrunchranSnareLurk_P", 1)
+        RRCS M 1 A_JumpIfTargetInLOS("ChaseBegin", 360, JLOSF_PROJECTILE)
+        RRCS M 0 A_GiveInventory("CrunchranSnareLurk_P", 1)
+        RRCS M 1 A_JumpIfTargetInLOS("ChaseBegin", 360, JLOSF_PROJECTILE)
+
+        RRCS L 0 A_GiveInventory("CrunchranSnareLurk_P", 1)
+        RRCS L 1 A_JumpIfTargetInLOS("ChaseBegin", 360, JLOSF_PROJECTILE)
+        RRCS L 0 A_GiveInventory("CrunchranSnareLurk_P", 1)
+        RRCS L 1 A_JumpIfTargetInLOS("ChaseBegin", 360, JLOSF_PROJECTILE)
+        RRCS L 0 A_GiveInventory("CrunchranSnareLurk_P", 1)
+        RRCS L 1 A_JumpIfTargetInLOS("ChaseBegin", 360, JLOSF_PROJECTILE)
+        RRCS L 0 A_GiveInventory("CrunchranSnareLurk_P", 1)
+        RRCS L 1 A_JumpIfTargetInLOS("ChaseBegin", 360, JLOSF_PROJECTILE)
+        RRCS L 0 A_GiveInventory("CrunchranSnareLurk_P", 1)
+        RRCS L 1 A_JumpIfTargetInLOS("ChaseBegin", 360, JLOSF_PROJECTILE)
+        RRCS L 0 A_GiveInventory("CrunchranSnareLurk_P", 1)
+        RRCS L 1 A_JumpIfTargetInLOS("ChaseBegin", 360, JLOSF_PROJECTILE)
+
+        RRCS M 0 A_GiveInventory("CrunchranSnareLurk_P", 1)
+        RRCS M 1 A_JumpIfTargetInLOS("ChaseBegin", 360, JLOSF_PROJECTILE)
+        RRCS M 0 A_GiveInventory("CrunchranSnareLurk_P", 1)
+        RRCS M 1 A_JumpIfTargetInLOS("ChaseBegin", 360, JLOSF_PROJECTILE)
+        RRCS M 0 A_GiveInventory("CrunchranSnareLurk_P", 1)
+        RRCS M 1 A_JumpIfTargetInLOS("ChaseBegin", 360, JLOSF_PROJECTILE)
+        RRCS M 0 A_GiveInventory("CrunchranSnareLurk_P", 1)
+        RRCS M 1 A_JumpIfTargetInLOS("ChaseBegin", 360, JLOSF_PROJECTILE)
+        goto Reset
+    ChaseBegin:
+        RRCS O 0 A_FaceTracer
+        RRCS O 3
+        RRCS P 0 A_SetAngle(angle + 36)
+        RRCS P 1 A_JumpIfTargetInLOS("MunchCheck", 360, JLOSF_PROJECTILE, RR_CRUNCHRAN_CHECKRAD)
+        RRCS P 0 A_SetAngle(angle + 36)
+        RRCS P 1 A_JumpIfTargetInLOS("MunchCheck", 360, JLOSF_PROJECTILE, RR_CRUNCHRAN_CHECKRAD)
+        RRCS P 0 A_SetAngle(angle + 36)
+        RRCS P 1 A_JumpIfTargetInLOS("MunchCheck", 360, JLOSF_PROJECTILE, RR_CRUNCHRAN_CHECKRAD)
+        RRCS P 0 A_SetAngle(angle + 36)
+        RRCS P 1 A_JumpIfTargetInLOS("MunchCheck", 360, JLOSF_PROJECTILE, RR_CRUNCHRAN_CHECKRAD)
+        RRCS P 0 A_SetAngle(angle + 36)
+        RRCS P 1 A_JumpIfTargetInLOS("MunchCheck", 360, JLOSF_PROJECTILE, RR_CRUNCHRAN_CHECKRAD)
+
+        RRCS P 8
+
+        RRCS P 0 A_SetAngle(angle - 36)
+        RRCS P 1 A_JumpIfTargetInLOS("MunchCheck", 360, JLOSF_PROJECTILE, RR_CRUNCHRAN_CHECKRAD)
+        RRCS P 0 A_SetAngle(angle - 36)
+        RRCS P 1 A_JumpIfTargetInLOS("MunchCheck", 360, JLOSF_PROJECTILE, RR_CRUNCHRAN_CHECKRAD)
+        RRCS P 0 A_SetAngle(angle - 36)
+        RRCS P 1 A_JumpIfTargetInLOS("MunchCheck", 360, JLOSF_PROJECTILE, RR_CRUNCHRAN_CHECKRAD)
+        RRCS P 0 A_SetAngle(angle - 36)
+        RRCS P 1 A_JumpIfTargetInLOS("MunchCheck", 360, JLOSF_PROJECTILE, RR_CRUNCHRAN_CHECKRAD)
+        RRCS P 0 A_SetAngle(angle - 36)
+        RRCS P 1 A_JumpIfTargetInLOS("MunchCheck", 360, JLOSF_PROJECTILE, RR_CRUNCHRAN_CHECKRAD)
+        goto Chase
+    ChaseRegin:
+        RRCS O 0 A_FaceTracer
+        RRCS OP 3
+    Chase:
+        RRCS Q 0 A_JumpIfTargetInLOS(1, 360, JLOSF_PROJECTILE) goto Reset
+        RRCS Q 0 A_JumpIfTargetInLOS("MunchCheck", 360, JLOSF_PROJECTILE, RR_CRUNCHRAN_CHECKRAD)
+        RRCS Q 1 A_GiveInventory("CrunchranSnareChase_P", 1)
+        RRCS Q 0 A_JumpIfTargetInLOS(1, 360, JLOSF_PROJECTILE) goto Reset
+        RRCS Q 0 A_JumpIfTargetInLOS("MunchCheck", 360, JLOSF_PROJECTILE, RR_CRUNCHRAN_CHECKRAD)
+        RRCS Q 1 A_GiveInventory("CrunchranSnareChase_P", 1)
+        RRCS Q 0 A_JumpIfTargetInLOS(1, 360, JLOSF_PROJECTILE) goto Reset
+        RRCS Q 0 A_JumpIfTargetInLOS("MunchCheck", 360, JLOSF_PROJECTILE, RR_CRUNCHRAN_CHECKRAD)
+        RRCS Q 1 A_GiveInventory("CrunchranSnareChase_P", 1)
+        RRCS Q 0 A_JumpIfTargetInLOS(1, 360, JLOSF_PROJECTILE) goto Reset
+        RRCS Q 0 A_JumpIfTargetInLOS("MunchCheck", 360, JLOSF_PROJECTILE, RR_CRUNCHRAN_CHECKRAD)
+        RRCS Q 1 A_GiveInventory("CrunchranSnareChase_P", 1)
+        RRCS Q 0 A_JumpIfTargetInLOS(1, 360, JLOSF_PROJECTILE) goto Reset
+        RRCS Q 0 A_JumpIfTargetInLOS("MunchCheck", 360, JLOSF_PROJECTILE, RR_CRUNCHRAN_CHECKRAD)
+        RRCS Q 1 A_GiveInventory("CrunchranSnareChase_P", 1)
+
+        RRCS R 0 A_JumpIfTargetInLOS(1, 360, JLOSF_PROJECTILE) goto Reset
+        RRCS R 0 A_JumpIfTargetInLOS("MunchCheck", 360, JLOSF_PROJECTILE, RR_CRUNCHRAN_CHECKRAD)
+        RRCS R 1 A_GiveInventory("CrunchranSnareChase_P", 1)
+        RRCS R 0 A_JumpIfTargetInLOS(1, 360, JLOSF_PROJECTILE) goto Reset
+        RRCS R 0 A_JumpIfTargetInLOS("MunchCheck", 360, JLOSF_PROJECTILE, RR_CRUNCHRAN_CHECKRAD)
+        RRCS R 1 A_GiveInventory("CrunchranSnareChase_P", 1)
+        RRCS R 0 A_JumpIfTargetInLOS(1, 360, JLOSF_PROJECTILE) goto Reset
+        RRCS R 0 A_JumpIfTargetInLOS("MunchCheck", 360, JLOSF_PROJECTILE, RR_CRUNCHRAN_CHECKRAD)
+        RRCS R 1 A_GiveInventory("CrunchranSnareChase_P", 1)
+        RRCS R 0 A_JumpIfTargetInLOS(1, 360, JLOSF_PROJECTILE) goto Reset
+        RRCS R 0 A_JumpIfTargetInLOS("MunchCheck", 360, JLOSF_PROJECTILE, RR_CRUNCHRAN_CHECKRAD)
+        RRCS R 1 A_GiveInventory("CrunchranSnareChase_P", 1)
+        RRCS R 0 A_JumpIfTargetInLOS(1, 360, JLOSF_PROJECTILE) goto Reset
+        RRCS R 0 A_JumpIfTargetInLOS("MunchCheck", 360, JLOSF_PROJECTILE, RR_CRUNCHRAN_CHECKRAD)
+        RRCS R 1 A_GiveInventory("CrunchranSnareChase_P", 1)
+
+        RRCS S 0 A_JumpIfTargetInLOS(1, 360, JLOSF_PROJECTILE) goto Reset
+        RRCS S 0 A_JumpIfTargetInLOS("MunchCheck", 360, JLOSF_PROJECTILE, RR_CRUNCHRAN_CHECKRAD)
+        RRCS S 1 A_GiveInventory("CrunchranSnareChase_P", 1)
+        RRCS S 0 A_JumpIfTargetInLOS(1, 360, JLOSF_PROJECTILE) goto Reset
+        RRCS S 0 A_JumpIfTargetInLOS("MunchCheck", 360, JLOSF_PROJECTILE, RR_CRUNCHRAN_CHECKRAD)
+        RRCS S 1 A_GiveInventory("CrunchranSnareChase_P", 1)
+        RRCS S 0 A_JumpIfTargetInLOS(1, 360, JLOSF_PROJECTILE) goto Reset
+        RRCS S 0 A_JumpIfTargetInLOS("MunchCheck", 360, JLOSF_PROJECTILE, RR_CRUNCHRAN_CHECKRAD)
+        RRCS S 1 A_GiveInventory("CrunchranSnareChase_P", 1)
+        RRCS S 0 A_JumpIfTargetInLOS(1, 360, JLOSF_PROJECTILE) goto Reset
+        RRCS S 0 A_JumpIfTargetInLOS("MunchCheck", 360, JLOSF_PROJECTILE, RR_CRUNCHRAN_CHECKRAD)
+        RRCS S 1 A_GiveInventory("CrunchranSnareChase_P", 1)
+        RRCS S 0 A_JumpIfTargetInLOS(1, 360, JLOSF_PROJECTILE) goto Reset
+        RRCS S 0 A_JumpIfTargetInLOS("MunchCheck", 360, JLOSF_PROJECTILE, RR_CRUNCHRAN_CHECKRAD)
+        RRCS S 1 A_GiveInventory("CrunchranSnareChase_P", 1)
+
+        RRCS R 0 A_JumpIfTargetInLOS(1, 360, JLOSF_PROJECTILE) goto Reset
+        RRCS R 0 A_JumpIfTargetInLOS("MunchCheck", 360, JLOSF_PROJECTILE, RR_CRUNCHRAN_CHECKRAD)
+        RRCS R 1 A_GiveInventory("CrunchranSnareChase_P", 1)
+        RRCS R 0 A_JumpIfTargetInLOS(1, 360, JLOSF_PROJECTILE) goto Reset
+        RRCS R 0 A_JumpIfTargetInLOS("MunchCheck", 360, JLOSF_PROJECTILE, RR_CRUNCHRAN_CHECKRAD)
+        RRCS R 1 A_GiveInventory("CrunchranSnareChase_P", 1)
+        RRCS R 0 A_JumpIfTargetInLOS(1, 360, JLOSF_PROJECTILE) goto Reset
+        RRCS R 0 A_JumpIfTargetInLOS("MunchCheck", 360, JLOSF_PROJECTILE, RR_CRUNCHRAN_CHECKRAD)
+        RRCS R 1 A_GiveInventory("CrunchranSnareChase_P", 1)
+        RRCS R 0 A_JumpIfTargetInLOS(1, 360, JLOSF_PROJECTILE) goto Reset
+        RRCS R 0 A_JumpIfTargetInLOS("MunchCheck", 360, JLOSF_PROJECTILE, RR_CRUNCHRAN_CHECKRAD)
+        RRCS R 1 A_GiveInventory("CrunchranSnareChase_P", 1)
+        RRCS R 0 A_JumpIfTargetInLOS(1, 360, JLOSF_PROJECTILE) goto Reset
+        RRCS R 0 A_JumpIfTargetInLOS("MunchCheck", 360, JLOSF_PROJECTILE, RR_CRUNCHRAN_CHECKRAD)
+        RRCS R 1 A_GiveInventory("CrunchranSnareChase_P", 1)
+        loop
+    MunchCheck:
+        RRCS T 1
+        RRCS T 0 A_Countdown
+        RRCS T 0 A_Stop
+        RRCS U 1
+    MunchCheckLoop:
+        RRCS L 0 A_JumpIfTargetInLOS(1, 360, JLOSF_PROJECTILE) goto Reset
+        RRCS L 0 A_JumpIfTargetInLOS(1, 360, JLOSF_PROJECTILE, RR_CRUNCHRAN_CHECKRAD) goto ChaseRegin
+        RRCS L 0 A_Countdown
+        RRCS L 1 A_JumpIfTracerCloser(RR_CRUNCHRAN_CHECKRAD*2, "Munch")
+        wait
+    Munch:
+        RRCS L 0 A_SpawnItemEx("CrunchranSnareMunch")
+        RRCS L 26
+        RRCS LLLLLLLLLLLLLLLLLLLLLLLLL 0 A_CountDown
+        goto MunchCheckLoop
+    Death:
+        RRCS M 0 A_Stop
+        RRCS MLK 3
+        stop
+    }
+}
+
+actor CrunchranSnareLurk_P : CustomInventory
+{
+    States
+    {
+    Pickup:
+        TNT1 A 0 A_Stop
+        TNT1 A 0 A_Wander
+        TNT1 A 0 A_Countdown
+        TNT1 A 0 A_SeekerMissile(90, 90, SMF_LOOK, 256, 20)
+        stop
+    }
+}
+
+actor CrunchranSnareChase_P : CustomInventory
+{
+    States
+    {
+    Pickup:
+        TNT1 A 0 A_FaceTracer
+        TNT1 A 0 A_Countdown
+        TNT1 A 0 A_JumpIfTracerCloser(RR_CRUNCHRAN_SPEED, "Slow")
+        TNT1 A 0 A_ChangeVelocity(RR_CRUNCHRAN_SPEED, 0, 0, CVF_RELATIVE|CVF_REPLACE)
+        stop
+    Slow:
+        TNT1 A 0 A_JumpIfTracerCloser(RR_CRUNCHRAN_SPEED/2, "Slower")
+        TNT1 A 0 A_ChangeVelocity(RR_CRUNCHRAN_SPEED/2, 0, 0, CVF_RELATIVE|CVF_REPLACE)
+        stop
+    Slower:
+        TNT1 A 0 A_ChangeVelocity(RR_CRUNCHRAN_SPEED/4, 0, 0, CVF_RELATIVE|CVF_REPLACE)
+        stop
+    }
+}
+
+actor CrunchranSnareMunch : BasicExplosion
+{
+    +THRUACTORS
+    Damage (0)
+    speed 0
+    obituary "$OB_RR_CRUNCHRAN"
+    damagetype "CrunchranSnare"
+    States
+    {
+    Spawn:
+        RRCS A 0
+        RRCS A 0 A_PlaySoundEx("reptile/assists/crunchranlunge", "body")
+        RRCS ABCC 1
+        RRCS DDDE 1
+        RRCS F 0 A_PlaySoundEx("reptile/assists/crunchranchomp", "body")
+        RRCS F 1 A_Explode(20, 60, 0, 0, 60)
+        RRCS G 6
+        RRCS HIJ 3
+        stop
+    }
+}
