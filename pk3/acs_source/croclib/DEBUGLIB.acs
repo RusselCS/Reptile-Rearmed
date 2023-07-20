@@ -1,0 +1,194 @@
+
+world int 7: globalTick;
+
+function bool isDebug(void)
+{
+    return getCvar("rr_sv_debugmode");
+}
+
+function bool isTitlemap(void)
+{
+    return StrICmp(StrParam(n:PRINTNAME_LEVEL), "TITLEMAP") == 0;
+}
+
+// i want console.printf back
+function void debugLog(int unit, int out)
+{
+    if(isDebug())
+        Log(s:"\c[y8][", i:globalTick, s:"][DEBUG:", s:unit, s:"] ", s:out);
+}
+
+// I'M MAKING FUCKING LOGF AND NO ONE CAN FUKCING STOP ME
+function str evaluateTemplate(str template, int val)
+{
+    int len = strLen(template);
+    int pos = findTemplate(template);
+    if(pos == -1)
+        return template;
+    
+    int type = valType(getChar(template, pos));
+    str out = valToString(val, type);
+    
+    template = strParam(s:strLeft(template, pos-1), s:out, s:strRight(template, len-pos-1));
+
+    return template;
+}
+
+function int findTemplate(str template)
+{
+    for(int i = 0; i < strLen(template); i++)
+    {
+        if(getChar(template, i) == '%')
+        {
+            if(i+1 == strLen(template))
+                return -1;
+            else
+                return i+1;
+        }
+    }
+    return -1;
+}
+
+#define STRFT_NONE -1
+#define STRFT_ARRAY 1
+#define STRFT_BINARY 2
+#define STRFT_CHAR 3
+#define STRFT_DEC 4
+#define STRFT_FIXED 5
+#define STRFT_KEY 6
+#define STRFT_LANG 7
+#define STRFT_NAME 8
+#define STRFT_STRING 9
+#define STRFT_HEX 10
+
+function int valType(int ch)
+{
+    switch(ch)
+    {
+        default:
+            return STRFT_NONE;
+        case 'a':
+        case 'A':
+            return STRFT_ARRAY;
+        case 'b':
+        case 'B':
+            return STRFT_BINARY;
+        case 'c':
+        case 'C':
+            return STRFT_CHAR;
+        case 'i':
+        case 'I':
+        case 'd':
+        case 'D':
+            return STRFT_DEC;
+        case 'f':
+        case 'F':
+            return STRFT_FIXED;
+        case 'k':
+        case 'K':
+            return STRFT_KEY;
+        case 'l':
+        case 'L':
+            return STRFT_LANG;
+        case 'n':
+        case 'N':
+            return STRFT_NAME;
+        case 's':
+        case 'S':
+            return STRFT_STRING;
+        case 'x':
+        case 'X':
+            return STRFT_HEX;
+    }
+    return STRFT_NONE;
+}
+
+function str valToString(int val, int type)
+{
+    switch(type)
+    {
+        case STRFT_NONE:
+        case STRFT_ARRAY: // not gonna support an array with this, unfortunately
+            return "ERR";
+        case STRFT_BINARY:
+            return strParam(b:val);
+        case STRFT_CHAR:
+            return strParam(c:val);
+        case STRFT_DEC:
+            return strParam(i:val);
+        case STRFT_FIXED:
+            return strParam(f:val);
+        case STRFT_KEY:
+            return strParam(k:val);
+        case STRFT_LANG:
+            return strParam(l:val);
+        case STRFT_NAME:
+            return strParam(n:val);
+        case STRFT_STRING:
+            return strParam(s:val);
+        case STRFT_HEX:
+            return strParam(x:val);
+    }
+    return "ERR";
+}
+
+// ACS doesn't support varargs, so this is the best I can do
+function str strf1(str template, int arg0)
+{
+    template = evaluateTemplate(template, arg0);
+    return template;
+}
+
+function str strf2(str template, int arg0, int arg1)
+{
+    template = evaluateTemplate(template, arg0);
+    return strf1(template, arg1);
+}
+
+function str strf3(str template, int arg0, int arg1, int arg2)
+{
+    template = evaluateTemplate(template, arg0);
+    return strf2(template, arg1, arg2);
+}
+
+function str strf4(str template, int arg0, int arg1, int arg2, int arg3)
+{
+    template = evaluateTemplate(template, arg0);
+    return strf3(template, arg1, arg2, arg3);
+}
+
+function str strf5(str template, int arg0, int arg1, int arg2, int arg3, int arg4)
+{
+    template = evaluateTemplate(template, arg0);
+    return strf4(template, arg1, arg2, arg3, arg4);
+}
+
+function str strf6(str template, int arg0, int arg1, int arg2, int arg3, int arg4, int arg5)
+{
+    template = evaluateTemplate(template, arg0);
+    return strf5(template, arg1, arg2, arg3, arg4, arg5);
+}
+
+function str strf7(str template, int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6)
+{
+    template = evaluateTemplate(template, arg0);
+    return strf6(template, arg1, arg2, arg3, arg4, arg5, arg6);
+}
+
+function str strf8(str template, int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7)
+{
+    template = evaluateTemplate(template, arg0);
+    return strf7(template, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+}
+
+function str strf9(str template, int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8)
+{
+    template = evaluateTemplate(template, arg0);
+    return strf8(template, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+}
+
+function str strf10(str template, int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, int arg9)
+{
+    template = evaluateTemplate(template, arg0);
+    return strf9(template, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+}

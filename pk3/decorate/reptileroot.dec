@@ -1,1 +1,3 @@
+#include "decorate/debug.dec"
+
 #include "decorate/assists/magnetbeam.dec"

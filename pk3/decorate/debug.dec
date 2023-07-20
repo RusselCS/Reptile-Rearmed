@@ -1,0 +1,25 @@
+actor ShowingDebugHitbox : Once {}
+
+actor DebugHitboxWarper : BaseShieldWarper
+{
+    States
+    {
+    Spawn:
+        TNT1 A 0
+        TNT1 A 1
+        TNT1 A 0 ACS_NamedExecuteAlways("croc_hitboxwarper", 0)
+    ShieldLoop:
+        CONC K 1 A_Warp(AAPTR_TARGET, 0, 0, 0, 0, WARPF_INTERPOLATE|WARPF_NOCHECKPOSITION|WARPF_ABSOLUTEANGLE)
+        wait
+    }
+}
+
+actor DebugExplosionHitboxWarper : BasicGraphicEffect
+{
+    States
+    {
+    Spawn:
+        CONC KK 4
+        stop
+    }
+}
