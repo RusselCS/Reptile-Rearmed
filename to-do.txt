@@ -1,0 +1,12 @@
+Recoil Rod:
+- Field animation
+
+Shield Boomerang:
+- "Active" sound
+- Rewrite state machine to actually properly handle ammo stuff
+- Find out the proper angles of defense
+
+-----
+
+Crunchran:
+- Clean its "spawn" so it always sticks to the ground

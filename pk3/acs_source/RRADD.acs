@@ -6,11 +6,34 @@
 
 script "rr_wepdefs" OPEN
 {
-    
+    // DefineWeapon(str wepTag, str wepActor, str wepIcon, str wepAmmo, int wepMult, int wepSlot, int wepMap, int wepLms, int wepEddie);
+    DefineWeapon("TAG_RR_RECOILROD", "RecoilRodWep", "RRRRZ0", "RecoilRodAmmo", 1.0, DTADD_SLOT_CLOSE, true, true, true);
+    DefineWeapon("TAG_RR_SHIELDBOOMERANG", "ShieldboomerangWep", "RRSBZ0", "ShieldboomerangAmmo", 0.4, DTADD_SLOT_CLOSE, true, true, true);
+}
+
+// I could, theoretically, give Shield Boomerang a dynamic ammo gain based on how much health and ammo is shown to be available on the map...
+// But that's really, really silly. So I just did the math myself and gave it a static number.
+
+script "rr_trainingsetup" OPEN {
+	RegisterTrainingDef("rr_definetraining");
+}
+
+script "rr_definetraining" (void) {
+	DefineTrainingEntry(DTADD_TRAINING_WEP, "TAG_RR_RECOILROD", "DESC_RR_RECOILROD", "RRRRZ0", "RecoilRodWep");
+	DefineTrainingEntry(DTADD_TRAINING_WEP, "TAG_RR_SHIELDBOOMERANG", "DESC_RR_SHIELDBOOMERANG", "RRSBZ0", "ShieldboomerangWep");
 }
 
 script "rr_assistdefs" OPEN
 {
+    // DefineAssistItem(str tag, str actor, str icon, int amount, int group, int map);
     DefineAssistItem("TAG_RR_MAGNETBEAM", "MagnetBeamItem", "RRMBB0", 3, DTADD_GRP_DASH, true);
     DefineAssistItem("TAG_RR_CRUNCHRAN", "CrunchranItem", "RRCSZ0", 1, DTADD_GRP_ATTACK, true);
+}
+
+#define RR_CLR_START 55389
+#define RR_CLR_RECOILROD RR_CLR_START + 0
+
+script "rr_createcolors" OPEN CLIENTSIDE
+{
+    CreatePlayerTranslation(RR_CLR_RECOILROD, 229, 40);
 }

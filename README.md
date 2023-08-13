@@ -1,8 +1,23 @@
-# DAM
+# Reptile Rearmed
+Reptile Rearmed is a weapon pack for MM8BDM v6b.
 
-Doom Archive Manager is a simple tool made in Java to bridge the gap between git and Zandronum modding.
-This repository serves as a quick setup tool for new projects.
+## Weapons
+- Recoil Rod (Mega Man Zero 3)
+- Z-Knuckle (Mega Man Zero 4)
+- Shield Boomerang (Mega Man Zero)
 
-# Creating a new project.
+## Assists
+It also contains the following assists:
+- Magnet Beam (Mega Man)
+- Crunchran Snare (Inspired by Mega Man 8)
 
-Creating a new project can be done by either pulling this repository into one on your machine, or by downloading the zip file and extracting that into a folder to use as a template.
+# Credits
+Weapon code, animations, and graphics created by Russel.
+
+Sprite assistance from Pegg and Korby.
+
+With Sound effects from:
+- *Bayou Billy*
+- *Cocoron*
+
+And, original sound effects by Orange Mario.

@@ -14,9 +14,14 @@ str debugSettings[MAXSETTINGS_DEBUG] = {
 
 script "rtx_debug_open" OPEN
 {
-    debugLog("rtx_debug_open", "\cg====================================================");
-    debugLog("rtx_debug_open", "\cgREPTILE REARMED IS RUNNING IN DEBUG MODE");
-    debugLog("rtx_debug_open", "\cg====================================================");
+    // debugLog("rtx_debug_open", "\cg====================================================");
+    // debugLog("rtx_debug_open", "\cgREPTILE REARMED IS RUNNING IN DEBUG MODE");
+    // debugLog("rtx_debug_open", "\cg====================================================");
+
+    int wep = ThingCountName("WeaponEnergy", T_NONE) + ThingCountName("BigWeaponEnergy", T_NONE) + ThingCountName("MegaWeaponEnergy", T_NONE);
+    int hp = ThingCountName("SmallHealth", T_NONE) + ThingCountName("BigHealth", T_NONE) + ThingCountName("MegaHealth", T_NONE);
+
+    debugLog("rtx_debug_open", Strf2("%d\t%d", wep, hp));
 
     bool canc = false;
     if(isDebug()) {
@@ -39,7 +44,7 @@ script "rtx_debug_open" OPEN
 #define MAXWEAPS_DEBUG 100
 
 str giveWeapons[MAXWEAPS_DEBUG] = {
-    "MemoryBombWep",
+    "ShieldBoomerangWep",
     "CrunchranItem",
     "MagnetBeamItem",
 ""};

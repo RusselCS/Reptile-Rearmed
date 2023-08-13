@@ -1,0 +1,9 @@
+#library "RRUTIL"
+
+#include "zcommon.acs"
+
+script "rr_setptr" (int who, int ptr, int tid)
+{
+    SetActivator(who);
+    SetPointer(ptr, tid);
+}

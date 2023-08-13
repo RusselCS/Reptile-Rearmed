@@ -1,4 +1,11 @@
 #include "decorate/debug.dec"
 
+#include "decorate/reptileconst.dec"
+
 #include "decorate/assists/magnetbeam.dec"
 #include "decorate/assists/crunchran.dec"
+
+actor MMZNormalBar : NormalBar { args 229, 40 }
+#include "decorate/weapons/recoilrod.dec"
+#include "decorate/weapons/shieldboomerang.dec"
+#include "decorate/weapons/memorybomb.dec"

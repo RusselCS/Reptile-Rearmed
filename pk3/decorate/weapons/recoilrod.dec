@@ -1,0 +1,171 @@
+actor RecoilRodWep_NormalBar : MMZNormalBar {}
+
+const int RR_RECOILROD_READY = 0;
+const float RR_RECOILROD_TURNRIGHT = -0.9;
+const float RR_RECOILROD_TURNLEFT = -RR_RECOILROD_TURNRIGHT;
+const int RR_RECOILROD_FORCE = 25;
+
+
+actor RecoilRodWep : BaseMM8BDMWep
+{
+//$Title Recoil Rod
+Weapon.AmmoUse 1
+Weapon.AmmoGive 28
+Weapon.SlotNumber 4
+Inventory.Pickupmessage "$PU_RR_RECOILROD"
+Obituary "$OB_RR_RECOILROD"
+Tag "$TAG_RR_RECOILROD"
+weapon.ammotype "RecoilRodAmmo"
+inventory.icon "RECROD"
+States
+{
+SpawnLoop:
+RRRR Z -1
+loop 
+Ready:
+RRRR L 0 ACS_NamedExecuteWithResult("core_weaponcolor",RR_CLR_RECOILROD)
+RRRR AABBCC 1 A_WeaponReady(RR_RECOILROD_READY)
+RRRR DDDDDDDD 1 A_WeaponReady(RR_RECOILROD_READY)
+RRRR E 0 A_PlaySoundEx("reptile/weapons/recoilroddraw", "weapon")
+RRRR EEFFGG 1 A_WeaponReady(RR_RECOILROD_READY)
+RRRR HHIIHHIIHHIIHHIIHHII 1 A_WeaponReady(RR_RECOILROD_READY)
+RRRR JJKK 1 A_WeaponReady(RR_RECOILROD_READY)
+ReadyLoop:
+RRRR LLMM 1 A_WeaponReady(RR_RECOILROD_READY)
+loop
+ReadyRaise:
+RRRR OONN 1  A_WeaponReady(RR_RECOILROD_READY)
+goto ReadyLoop
+Deselect:
+RRRR F 0
+goto DeselectSwap
+Select:
+RRRR F 0
+goto SelectSwap
+
+Fire:
+RRRR NO 1
+TNT1 A 1
+goto SwingLeft
+
+Altfire:
+RRRR NO 1
+TNT1 A 1
+goto SwingRight
+
+SwingLeft:
+TNT1 A 0 A_JumpIfNoAmmo("NoAmmo")
+RRR1 A 0 A_PlaySoundEx("reptile/weapons/recoilrodswing", "Weapon")
+RRR1 A 0 A_FireCustomMissile("RecoilRodAtk", 0, 1, 0, 0)
+RRR1 A 0 ACS_NamedExecuteWithResult("rr_justframes", BT_ATTACK|BT_ALTATTACK, 5)
+RRR1 ABC 1 A_SetAngle(angle + RR_RECOILROD_TURNRIGHT)
+RRR1 DDEE 1 A_JumpIfInventory("ReptileJustFrames", 1, "SwingLeftStrong")
+RRR1 FGH 1
+RRR1 A 0 A_Refire("SwingRight")
+Goto ReadyRaise
+
+SwingLeftStrong:
+RRR1 CCC 1
+RRR1 C 0 A_PlaySoundEx("reptile/weapons/recoilrodswingstrong", "weapon")
+RRR1 C 0 A_FireCustomMissile("RecoilRodStrongAtk", 0, 1, 0, 0)
+RRR1 C 0 A_TakeInventory("RecoilRodAmmo", 2)
+RRR1 IJKLDDEEFFGGHH 1
+RRR1 A 0 A_Refire("SwingRight")
+goto ReadyRaise
+
+SwingRight:
+TNT1 A 0 A_JumpIfNoAmmo("NoAmmo")
+RRR2 A 0 A_PlaySoundEx("reptile/weapons/recoilrodswing", "Weapon")
+RRR2 A 0 A_FireCustomMissile("RecoilRodAtk", 0, 1, 0, 0)
+RRR1 A 0 ACS_NamedExecuteWithResult("rr_justframes", BT_ATTACK|BT_ALTATTACK, 5)
+RRR2 ABC 1 A_SetAngle(angle + RR_RECOILROD_TURNLEFT)
+RRR2 DDEE 1 A_JumpIfInventory("ReptileJustFrames", 1, "SwingRightStrong")
+RRR2 FGH 1
+RRR2 A 0 A_Refire("SwingLeft")
+Goto ReadyRaise
+
+SwingRightStrong:
+RRR2 CCC 1
+RRR2 C 0 A_PlaySoundEx("reptile/weapons/recoilrodswingstrong", "weapon")
+RRR1 C 0 A_FireCustomMissile("RecoilRodStrongAtk", 0, 1, 0, 0)
+RRR1 C 0 A_TakeInventory("RecoilRodAmmo", 2)
+RRR2 IJKLDDEEFFGGHH 1
+RRR2 A 0 A_Refire("SwingLeft")
+goto ReadyRaise
+
+NoAmmo:
+TNT1 A 1 ACS_NamedExecuteAlways("core_noammo",0)
+TNT1 A 0 A_Refire("NoAmmoCheck")
+Goto ReadyRaise
+NoAmmoCheck:
+TNT1 A 1 A_JumpIfNoAmmo("NoAmmo")
+TNT1 A 0 A_Refire
+goto ReadyRaise
+}
+}
+
+actor RecoilRodAmmo : Ammo
+{
+inventory.amount 1
+inventory.maxamount 28
++INVENTORY.IGNORESKILL
+}
+
+actor RecoilRodSwitch : Once {}
+
+actor RecoilRodAtk : BasicFastProjectile
+{
+    speed 120
+    Damage (12)
+    Obituary "$OB_RR_RECOILROD"
+    States
+    {
+    Spawn:
+        TNT1 A 0
+        TNT1 A 0
+        stop
+    XDeath:
+        TNT1 A 0
+        goto DeathQuake
+    Death:
+        TNT1 A 0 A_Quake(1,6,0,180)
+        TNT1 AAAAAA 1 A_GiveToTarget("RecoilRodImpact_P", 1)
+        goto DeathQuake+1
+    DeathQuake:
+        TNT1 A 0 A_Quake(1,6,0,180)
+        TNT1 A 15
+        stop
+    }
+}
+
+actor RecoilRodStrongAtk : RecoilRodAtk
+{
+    +HITTRACER
+    Damage (24)
+    Obituary "$OB_RR_RECOILROD2"
+    States
+    {
+    XDeath:
+        TNT1 A 0 ACS_NamedExecuteWithResult("rr_recoilrodthrust", RR_RECOILROD_FORCE, true)
+        goto DeathQuake
+    Death:
+        TNT1 A 0 ACS_NamedExecuteWithResult("rr_recoilrodthrust", RR_RECOILROD_FORCE, false)
+        goto DeathQuake
+    DeathQuake:
+        TNT1 A 0 A_Quake(2,6,0,180)
+        TNT1 A 15
+        stop
+    }
+}
+
+actor RecoilRodImpact_P : CustomInventory
+{
+    States
+    {
+    Pickup:
+        TNT1 A 0 A_Stop
+        stop
+    }
+}
+
+// [TODO] Ring effect, middle frame: Remove white and see how you feel about it

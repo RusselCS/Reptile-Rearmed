@@ -6,3 +6,14 @@ TAG_RR_MAGNETBEAM = "Magnet Beam";
 PU_RR_CRUNCHRAN = "Support Item! Crunchran Snare!";
 TAG_RR_CRUNCHRAN = "Crunchran Snare";
 OB_RR_CRUNCHRAN = "%o was munched by %k's Crunchran Snare.";
+
+PU_RR_RECOILROD = "You got the \caRecoil Rod!";
+OB_RR_RECOILROD = "%o was punctured by %k's Recoil Rod.";
+OB_RR_RECOILROD2 = "%o was repelled by %k's Recoil Rod.";
+TAG_RR_RECOILROD = "Recoil Rod";
+DESC_RR_RECOILROD = "Bladed tonfas. Hold attack for a rapid-fire stabbing melee attack. Tap fire during its animation to do a powerful thrust that knocks enemies back and bounces you off terrain!";
+
+PU_RR_SHIELDBOOMERANG = "You got the \caShield Boomerang!";
+OB_RR_SHIELDBOOMERANG = "%o was cleaved by %k's Recoil Rod.";
+TAG_RR_SHIELDBOOMERANG = "Shield Boomerang";
+DESC_RR_SHIELDBOOMERANG = "Spinning blade shield! Hold fire to defend damage from the front.  Tap fire to throw the shield as a ripping boomerang!";

@@ -1,7 +1,18 @@
+////////// WEAPONS //////////
+reptile/weapons/recoilroddraw        RRRRDRAW // Bayou Billy
+reptile/weapons/recoilrodswing       RRRRSWNG // Bayou Billy
+reptile/weapons/recoilrodswingstrong RRRRSTRN // Cocoron
+reptile/weapons/recoilrodstrike      RRRRSTRK // Bayou Billy
+
+reptile/weapons/shieldboomerangbreak    RRSBBRAK // Contra
+reptile/weapons/shieldboomerangdefend   RRSBDFND // Zelda 2
+reptile/weapons/shieldboomerangfly      RRSBFLY  // Cocoron
+reptile/weapons/shieldboomerangthrow    RRSBTHRO // Zelda 2
+reptile/weapons/shieldboomerangthrow2   RRSBTHR2 // Batman - Return of the Joker
 
 ////////// ASSISTS //////////
-reptile/assists/magnetbeamspawn ETRAP
-reptile/assists/scoreballpickup CTFPCKUP
+reptile/assists/magnetbeamspawn ETRAP    // Mega Man 1 (from vanilla)
+reptile/assists/scoreballpickup CTFPCKUP // Mega Man 1 (from vanilla)
 
-reptile/assists/crunchranlunge COMSHO
-reptile/assists/crunchranchomp CHOMP
+reptile/assists/crunchranlunge COMSHO    // Mega Man 10 (from vanilla)
+reptile/assists/crunchranchomp CHOMP     // Mega Man 3  (from vanilla)

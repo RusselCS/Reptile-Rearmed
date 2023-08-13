@@ -1,0 +1,220 @@
+#library "RRACS"
+
+#include "zcommon.acs"
+
+#include "debuglib.acs"
+
+#include "8BDMMATH.acs"
+#include "CROCFUNC.acs"
+
+// ----- JUST FRAMES -----
+script "rr_justframes" (int btn, int time)
+{
+    int buttons = GetPlayerInput(-1, MODINPUT_BUTTONS);
+    int oldButtons = GetPlayerInput(-1, MODINPUT_OLDBUTTONS);
+    do
+    {
+        if((buttons & btn) && !(oldButtons & btn)) { GiveInventory("ReptileJustFrames", 1); terminate; }
+        
+        oldButtons = buttons;
+        buttons = GetPlayerInput(-1, MODINPUT_BUTTONS);
+        delay(1);
+        time--;
+    }
+    while(time > 0);
+}
+
+// ----- RECOIL ROD -----
+script "rr_recoilrodthrust" (int force, int tracer)
+{
+    force <<= 16;
+
+    int prj = ActivatorTID();
+    bool uPrj = false;
+    if(prj == 0) {
+        prj = UniqueTID();
+        Thing_ChangeTID(0, prj);
+        uPrj = true;
+    }
+
+    int yaw, pitch, x, y, z;
+
+    if(tracer) // thrust something
+    {
+        SetActivator(0, AAPTR_TRACER);
+
+        if(CheckInventory("MM8BDMPlayer") == 0) {
+            tracer = false;
+            SetActivator(prj);
+        } else {
+            int trc = ActivatorTID();
+            bool uTrc = false;
+            if(trc == 0) {
+                trc = UniqueTID();
+                Thing_ChangeTID(0, trc);
+                uTrc = true;
+            }
+
+            SetActivator(prj);
+            SetActivator(0, AAPTR_TARGET);
+
+            yaw = GetActorAngle(0);
+            pitch = GetActorPitch(0);
+            x = FixedMul(cos(-pitch), FixedMul(cos(yaw), force));
+            y = FixedMul(cos(-pitch), FixedMul(sin(yaw), force));
+            z = FixedMul(FixedMul(sin(-pitch), force), 0.83);
+
+            SetActorVelocity(trc, x, y, z, false, false);
+
+            if(uTrc) { Thing_ChangeTID(trc, 0); }
+        }
+    }
+
+    if(!tracer) { // thrust user
+        SetActivator(0, AAPTR_TARGET);
+
+        yaw = GetActorAngle(0);
+        pitch = GetActorPitch(0);
+        x = FixedMul(cos(-pitch), FixedMul(cos(yaw), -force));
+        y = FixedMul(cos(-pitch), FixedMul(sin(yaw), -force));
+        z = FixedMul(FixedMul(sin(-pitch), -force), 0.83);
+
+        SetActorVelocity(0, x, y, z, false, false);
+    }
+    if(uPrj) { Thing_ChangeTID(prj, 0); }
+}
+
+// ----- SHIELD BOOMERANG -----
+script "rr_shieldboomerang" (int ev, int dmg, int type) EVENT
+{
+    if(ev == GAMEEVENT_ACTOR_DAMAGED) {
+        if(CheckInventory("ShieldBoomerangProtect") > 0) {
+            dmg = GetEventResult();
+
+            int otid = ActivatorTID();
+            int utid = false;
+            if(otid == 0) {
+                utid = true;
+                otid = UniqueTID();
+                Thing_ChangeTID(0, otid);
+            }
+
+            int angle = GetActorAngle(0);
+            int posx = GetActorX(0);
+            int posy = GetActorY(0);
+
+            SetActivator(0, AAPTR_DAMAGE_INFLICTOR);
+
+            int inflictorposx = GetActorX(0);
+            int inflictorposy = GetActorY(0);
+
+            int dmgAng = VectorAngle(inflictorposx - posx, inflictorposy - posy);
+            if(angleBetween(angle, dmgAng-0.125, dmgAng+0.125)) {
+                TakeActorInventory(otid, "ShieldBoomerangAmmo", dmg);
+                ThingSound(otid, "reptile/weapons/shieldboomerangdefend", 128);
+                SetResultValue(0);
+            }
+
+            if(utid) {
+                Thing_ChangeTID(otid, 0);
+            }
+        }
+    }
+}
+
+function int normalizeAngle(int ng) {
+    ng = ng % 1.0;
+
+    if(ng > 0.0)
+        return ng;
+    return ng + 1.0;
+}
+
+function int angleBetween(int ang, int mnAng, int mxAng) {
+    ang = normalizeAngle(ang);
+    mnAng = normalizeAngle(mnAng);
+    mxAng = normalizeAngle(mxAng);
+
+    if (mnAng < mxAng)
+        return mnAng <= ang && ang <= mxAng;
+    return mnAng <= ang || ang <= mxAng;
+}
+
+// ----- MEMORY BOMB -----
+// DAMAGE STORE DATA
+int dmgStore_int[MAX_PLAYERS][2];
+str dmgStore_str[MAX_PLAYERS][2];
+
+function int getDmgAmt(int pln) { return dmgStore_int[pln][0]; }
+function int getDmgHits(int pln) { return dmgStore_int[pln][1]; }
+function str getDmgClass(int pln) { return dmgStore_str[pln][0]; }
+function str getDmgType(int pln) { return dmgStore_str[pln][1]; }
+
+function void setDmgAmt(int pln, int val) { dmgStore_int[pln][0] = val << 16; }
+function void setDmgHits(int pln, int val) { dmgStore_int[pln][1] = val; }
+function void setDmgClass(int pln, str val) { dmgStore_str[pln][0] = val; }
+function void setDmgType(int pln, str val) { dmgStore_str[pln][1] = val; }
+
+function void storeDmg(int pln, int dmg, int hits, str cls, str type)
+{
+    setDmgAmt(pln, dmg);
+    setDmgClass(pln, cls);
+    setDmgType(pln, type);
+}
+
+script "rr_damageevent" (int ev, int dmg, int type) EVENT
+{
+    if(ev == GAMEEVENT_ACTOR_DAMAGED && isPlayerPln(PlayerNumber())) {
+        SetActivator(0, AAPTR_DAMAGE_INFLICTOR);
+        Log(i:dmg);
+        int plr = CallACS0("core_gettarget") - 1000;
+        if(isPlayerPln(plr) && !StrMatches(type, "VesselBomb")) {
+            GiveInventory("hitsCount", 1);
+            int hits = CheckInventory("hitsCount");
+            Log(s:"Hits ", i:hits);
+            if(StrMatches(type, getDmgType(plr)) || dmg > getDmgAmt(plr) || hits > getDmgHits(plr))
+                storeDmg(plr, dmg, hits, GetActorClass(0), type);
+        }
+    }
+}
+
+script "rr_memorybombexplode" (int count)
+{
+    int owner = CallACS0("core_gettarget");
+    int pln = owner - 1000;
+    if(isPlayerPln(pln)) {
+        str class = getDmgClass(pln);
+        int spd = getClassProperty(class, APROP_Speed);
+        int radius = getClassProperty(class, APROP_Radius);
+
+        if(spd < 10.0) {
+            radius += 48.0;
+        }
+
+        int yawDiff = 1.0/count;
+        int yawBase = GetActorAngle(0);
+        int posX = GetActorX(0);
+        int posY = GetActorY(0);
+        int posZ = GetActorZ(0);
+
+        for(int i = 0; i < count; i++)
+        {
+            int u = UniqueTID();
+            int yaw = yawBase + (yawDiff * i);
+            SpawnForced(class, posX+FixedMul(cos(yaw), spd), posY+FixedMul(sin(yaw), spd), posZ, u, yaw >> 8);
+            SetActorVelocity(u, FixedMul(cos(yaw), spd), FixedMul(sin(yaw), spd), 0, false, false);
+            SetActorPointer(u, AAPTR_TARGET, owner);
+            Thing_ChangeTID(u, 0);
+        }
+    }
+}
+
+function int reduceDamage(int dmg, int pct)
+{
+    int ret = pct;
+    if(ret < 1.0) {
+        ret = solveForX(1.0, dmg, 0.0);
+    }
+    Log(s:"Changing damage factor! ", f:ret);
+    return ret;
+}
